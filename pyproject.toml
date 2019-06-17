@@ -8,4 +8,4 @@ exclude = '''
   | dist
 )/
 '''
-target_version = ['py34']
+target_version = ['py36']

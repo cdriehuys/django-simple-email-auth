@@ -1,0 +1,57 @@
+---
+dist: xenial
+language: python
+python:
+  - "3.6"
+  - "3.7"
+
+cache: pip
+
+env:
+  - DJANGO='>= 1.11, < 1.12'
+  - DJANGO='>= 2.0, < 2.1'
+  - DJANGO='>= 2.1, < 2.2'
+
+install:
+  - pip install --upgrade pip
+  - pip install "Django $DJANGO"
+  - python setup.py install
+  - pip install -r requirements/dev.txt
+
+script:
+  - black --check .
+  - flake8
+
+# Add job to deploy to PyPI after tests complete
+jobs:
+  include:
+    - stage: PyPI release
+      if: tag IS present
+
+      python: "3.7"
+      env: DJANGO='>= 2.1, < 2.2'
+
+      # Skip usual steps
+      install: skip
+      script: skip
+      # Can't just skip after_success because then the deployment gets skipped.
+      # Issue: https://github.com/travis-ci/travis-ci/issues/8337
+      after_success: echo "Skipping 'after_success' for deployment."
+
+      deploy:
+        provider: pypi
+        user: cdriehuys
+        password:
+          secure: "F8XNgIsdCt5Biwkua2ayWDUvNHuESOBXMri5gnihOiLWLLy7VB4yY6yc8WjCZzkT5Mi7tq21WEb6wYBTM3iuG4edhst6YjGOwwk2tyD6PZO0nv7uRF/mNkuAqpgCgr7kVDL/+vWoRK2Mr4clvmeA8SC7SXLyPUroslx57IaEA+0JzPAVLjAH+9oWs4ADbhPEALK2oy3obLzt+fVrE4ai64lIqRoEV451EZ4kgG8OAEL1JITsFPDI7s/N2iDztVw3Vcq+g/rKzPsGB/+5FxneafTi+Rv9bPHc7OW9+rMgktl0lHfpovZNXULy/Yiz9Jw7HmpurlfpF3Ve2fPTB/pxuDFxaHNDQ5oe7sB624CvK1Wr0AzUWiOdP9/JsVxMF8/rceEZakjYN5BaiZvU1llWN7LCcIJhiKgVPKej5CLqD/8ESd3Po6/+O03EShbD1VzkDXWkd74sGX+3gcaRH4HLFHMRLeDCQGxAvw5lZGBfmxO1bTe7rtx0zt/0y/VL8xxKaRfGK/GZJHAFczYX64Zob9s3pIrhorynRKtrBGF+DlkW74KGLV1VxZYWDMBgqtwuBgCZ3+bTrN1zjbn9crrF2Lms0vUYzhVIRaVpl55R7HLEMCIqQRbvlLDjSexWq5QsqXv53Tf6CDk1xU7icJi85xk2GyrMJkxoxQ49JWjOG2Y="
+        distributions: sdist bdist_wheel
+        on:
+          tags: yes
+
+
+# Only send notification emails for build failures. The default is to send
+# success emails on "changes" which means we get an email for each new branches:
+# that passes.
+notifications:
+  email:
+    on_failure: always
+    on_success: never
