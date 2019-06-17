@@ -1,1 +1,1 @@
-default_app_config = 'email_auth.apps.EmailAuthConfig'
+default_app_config = "email_auth.apps.EmailAuthConfig"

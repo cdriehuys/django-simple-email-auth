@@ -37,7 +37,5 @@ setup(
     include_package_data=True,
     packages=find_packages(),
     # Dependencies
-    install_requires=[
-        "Django >= 1.10",
-    ],
+    install_requires=["Django >= 1.10"],
 )
