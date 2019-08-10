@@ -2,24 +2,7 @@ from django.contrib import auth
 from django.utils import timezone
 
 from email_auth import models
-
-
-def create_expected_repr(instance, fields):
-    """
-    Create the expected string representation of an instance.
-
-    Args:
-        instance:
-            The instance to create the expected repr of.
-        fields:
-            An array of field names that should be in the repr.
-
-    Returns:
-        The expected output of ``repr(instance)``.
-    """
-    values = [f"{field}={repr(getattr(instance, field))}" for field in fields]
-
-    return f"{instance.__class__.__name__}({', '.join(values)})"
+from email_auth.test import test_utils
 
 
 def test_init_with_all_fields():
@@ -63,7 +46,7 @@ def test_repr():
         time_verified=timezone.now(),
         user=auth.get_user_model()(),
     )
-    expected = create_expected_repr(
+    expected = test_utils.create_expected_repr(
         email,
         [
             "address",
