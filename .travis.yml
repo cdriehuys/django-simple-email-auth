@@ -23,6 +23,9 @@ script:
   - flake8
   - pytest email_auth
 
+  # Catch errors such as referencing non-existent fields in the admin.
+  - example_project/manage.py check
+
 # Add job to deploy to PyPI after tests complete
 jobs:
   include:
