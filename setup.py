@@ -21,9 +21,8 @@ setup(
         "Development Status :: 3 - Alpha",
         # Supported versions of Django
         "Framework :: Django",
-        "Framework :: Django :: 1.11",
-        "Framework :: Django :: 2.0",
         "Framework :: Django :: 2.1",
+        "Framework :: Django :: 2.2",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Natural Language :: English",
@@ -37,5 +36,5 @@ setup(
     include_package_data=True,
     packages=find_packages(),
     # Dependencies
-    install_requires=["Django >= 1.10"],
+    install_requires=["Django >= 2.1", "django-email-utils >= 1.0"],
 )

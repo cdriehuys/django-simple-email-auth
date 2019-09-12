@@ -1,6 +1,7 @@
 import string
 import uuid
 
+import email_utils
 from django.conf import settings
 from django.db import models
 from django.utils import crypto
@@ -204,3 +205,23 @@ class EmailVerification(models.Model):
             is for.
         """
         return f"Verification for {self.email}"
+
+    def send_email(self):
+        """
+        Send an email containing the verification token to the email
+        address being verified.
+        """
+        context = {
+            "email": self.email,
+            "user": self.email.user,
+            "verification": self,
+        }
+        template = "email_auth/emails/verify-email"
+
+        email_utils.send_email(
+            context=context,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[self.email.address],
+            subject=_("Please Verify Your Email Address"),
+            template_name=template,
+        )

@@ -8,9 +8,8 @@ python:
 cache: pip
 
 env:
-  - DJANGO='>= 1.11, < 1.12'
-  - DJANGO='>= 2.0, < 2.1'
   - DJANGO='>= 2.1, < 2.2'
+  - DJANGO='>= 2.2, < 2.3'
 
 install:
   - pip install --upgrade pip
@@ -33,7 +32,7 @@ jobs:
       if: tag IS present
 
       python: "3.7"
-      env: DJANGO='>= 2.1, < 2.2'
+      env: DJANGO='>= 2.2, < 2.3'
 
       # Skip usual steps
       install: skip

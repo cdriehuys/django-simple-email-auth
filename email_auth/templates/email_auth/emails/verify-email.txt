@@ -1,0 +1,6 @@
+{% load i18n %}{% blocktrans with email_address=email.address token=verification.token %}Hello {{ user }},
+
+Please verify your email address ({{ email_address }}) using the following token:
+
+{{ token }}
+{% endblocktrans %}
