@@ -1,11 +1,15 @@
+import logging
 import string
 import uuid
 
 import email_utils
 from django.conf import settings
 from django.db import models
-from django.utils import crypto
+from django.utils import crypto, timezone
 from django.utils.translation import ugettext_lazy as _
+
+
+logger = logging.getLogger(__name__)
 
 
 # Warning: changing this value requires database migrations as it
@@ -140,6 +144,17 @@ class EmailAddress(models.Model):
         """
         self.normalized_address = self.address.lower()
 
+    def verify(self):
+        """
+        Mark the email address instance as verified.
+        """
+        self.is_verified = True
+        self.time_verified = timezone.now()
+
+        logger.info("Verified email address %s", self.address)
+
+        self.save()
+
 
 class EmailVerification(models.Model):
     """
@@ -225,3 +240,11 @@ class EmailVerification(models.Model):
             subject=_("Please Verify Your Email Address"),
             template_name=template,
         )
+
+    def verify(self):
+        """
+        Mark the associated email address as verified and delete the
+        verification instance.
+        """
+        self.email.verify()
+        self.delete()
