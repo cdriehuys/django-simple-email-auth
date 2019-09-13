@@ -1,3 +1,5 @@
+from unittest import mock
+
 from django.contrib import auth
 from django.utils import timezone
 
@@ -71,3 +73,15 @@ def test_str():
     email = models.EmailAddress(address="Test@Example.com")
 
     assert str(email) == email.address
+
+
+@mock.patch("email_auth.models.timezone.now", return_value=timezone.now())
+def test_verify(mock_now):
+    email = models.EmailAddress()
+
+    with mock.patch.object(email, "save", autospec=True) as mock_save:
+        email.verify()
+
+    assert email.is_verified
+    assert email.time_verified == mock_now.return_value
+    assert mock_save.call_count == 1

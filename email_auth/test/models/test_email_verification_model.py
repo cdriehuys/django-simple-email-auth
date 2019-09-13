@@ -73,3 +73,22 @@ def test_str():
     expected = f"Verification for {email}"
 
     assert str(verification) == expected
+
+
+def test_verify():
+    """
+    Verifying an instance should mark the associated email as verified
+    and delete the verification instance.
+    """
+    email = models.EmailAddress()
+    verification = models.EmailVerification(email=email)
+
+    with mock.patch.object(
+        email, "verify", autospec=True
+    ) as mock_verify, mock.patch.object(
+        verification, "delete", autospec=True
+    ) as mock_delete:
+        verification.verify()
+
+    assert mock_verify.call_count == 1
+    assert mock_delete.call_count == 1
