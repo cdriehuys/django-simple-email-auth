@@ -45,7 +45,7 @@ jobs:
         provider: pypi
         user: cdriehuys
         password:
-          secure: "F8XNgIsdCt5Biwkua2ayWDUvNHuESOBXMri5gnihOiLWLLy7VB4yY6yc8WjCZzkT5Mi7tq21WEb6wYBTM3iuG4edhst6YjGOwwk2tyD6PZO0nv7uRF/mNkuAqpgCgr7kVDL/+vWoRK2Mr4clvmeA8SC7SXLyPUroslx57IaEA+0JzPAVLjAH+9oWs4ADbhPEALK2oy3obLzt+fVrE4ai64lIqRoEV451EZ4kgG8OAEL1JITsFPDI7s/N2iDztVw3Vcq+g/rKzPsGB/+5FxneafTi+Rv9bPHc7OW9+rMgktl0lHfpovZNXULy/Yiz9Jw7HmpurlfpF3Ve2fPTB/pxuDFxaHNDQ5oe7sB624CvK1Wr0AzUWiOdP9/JsVxMF8/rceEZakjYN5BaiZvU1llWN7LCcIJhiKgVPKej5CLqD/8ESd3Po6/+O03EShbD1VzkDXWkd74sGX+3gcaRH4HLFHMRLeDCQGxAvw5lZGBfmxO1bTe7rtx0zt/0y/VL8xxKaRfGK/GZJHAFczYX64Zob9s3pIrhorynRKtrBGF+DlkW74KGLV1VxZYWDMBgqtwuBgCZ3+bTrN1zjbn9crrF2Lms0vUYzhVIRaVpl55R7HLEMCIqQRbvlLDjSexWq5QsqXv53Tf6CDk1xU7icJi85xk2GyrMJkxoxQ49JWjOG2Y="
+          secure: "qHYXRgWrRJH62cI5ATmgdg7jdWFo6TYKreUeQhRcjm4qVQYSeRlKXmLjSdxOqurB8spuiQHqMmpzHm0OAiz3CDSefe9gFSRekQs7CtWbrLtSq03kosNAcGe7eaYpqdN/ZjuDejEVH2zte55olBBEAAQiwclRLpn+0+TzN561TnQj2tix2IVZrdkcTTPpzU9uLxLMYxMrSA62mP/+MJKCRSnw8zRQ5ROTsCDr1Ke3sS0B7xZyrUxGRWUAStZzEpEgrthlgW1LyM1v1THHdkijVkxbT5Wp6ypRXieVYhMqEasiDcGIyCaDOfcBMD4vXqlK0THkNHWxbyA0dcZCAOiPjX/mchtbdlk0OgrJqO2Okocnv9D0R49KIVB+It3j7gTbI4MwBb+KKdPuKPzerCNmc7gLDzf09tu6zhv2+1mj4ETP5NbtzNjJC99wp/jB+nsKdjBsmQZLqM8ij78pfcl+gwl3r++JzOgsTlblK1bmxpXSFpX3F8GS/LUA6WPmCirMN5cp8SOvg3Kxst1ucv7LDgGOZTU7OHSvkrvgYsxRka62+XMdTbeSbCUDUfI5JyqUFpYd2VOhd9nMjYvw0AcHSHBzypJ+DqUrXo6XFi4BwYxnGn8vIKnbZv0GvhrHhPy6c0NE10OSLG4/Br82QPl1gTN586H3/55W8gu5bsuGyOo="
         distributions: sdist bdist_wheel
         on:
           tags: yes
