@@ -144,6 +144,19 @@ class EmailAddress(models.Model):
         """
         self.normalized_address = self.address.lower()
 
+    def send_verification_email(self):
+        """
+        Create and send a verification email to the address associated
+        with the instance.
+
+        Returns:
+            The created :py:class:`EmailVerification` instance.
+        """
+        verification = EmailVerification.objects.create(email=self)
+        verification.send_email()
+
+        return verification
+
     def verify(self):
         """
         Mark the email address instance as verified.

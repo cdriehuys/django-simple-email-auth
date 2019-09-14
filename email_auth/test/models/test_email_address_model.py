@@ -65,6 +65,20 @@ def test_repr():
     assert repr(email) == expected
 
 
+@mock.patch("email_auth.models.EmailVerification.save", autospec=True)
+@mock.patch("email_auth.models.EmailVerification.send_email", autospec=True)
+def test_send_verification_email(*_):
+    """
+    This method should create a new verification token for the address
+    and send it to the user.
+    """
+    email = models.EmailAddress(address="test@example.com")
+    verification = email.send_verification_email()
+
+    assert verification.save.call_count == 1
+    assert verification.send_email.call_count == 1
+
+
 def test_str():
     """
     Converting an email address to a string should return the address
