@@ -52,7 +52,7 @@ class EmailAddressAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.EmailVerification)
-class EmailVerification(admin.ModelAdmin):
+class EmailVerificationAdmin(admin.ModelAdmin):
     """
     Admin for the ``EmailVerification`` model.
     """
