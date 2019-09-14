@@ -31,7 +31,6 @@ class EmailAddressAdmin(admin.ModelAdmin):
     date_hierarchy = "time_created"
     fields = (
         "address",
-        "normalized_address",
         "user",
         "is_verified",
         "time_verified",
@@ -48,8 +47,8 @@ class EmailAddressAdmin(admin.ModelAdmin):
         "time_updated",
     )
     list_filter = ("is_verified",)
-    readonly_fields = ("normalized_address", "time_created", "time_updated")
-    search_fields = ("address", "normalized_address")
+    readonly_fields = ("time_created", "time_updated")
+    search_fields = ("address",)
 
 
 @admin.register(models.EmailVerification)

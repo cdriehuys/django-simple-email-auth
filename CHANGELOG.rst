@@ -6,6 +6,12 @@ Changelog
 In Development
 **************
 
+Breaking Changes
+================
+
+* #12: Removed ``normalized_address`` field from ``EmailAddress`` model because
+  its behavior can easily be replicated by querying against ``address__iexact``.
+
 Features
 ========
 
