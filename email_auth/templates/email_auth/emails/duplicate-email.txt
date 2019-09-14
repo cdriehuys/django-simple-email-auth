@@ -1,0 +1,9 @@
+{% load i18n %}{% blocktrans with user=email.user %}Hello {{ user }},
+
+Someone recently attempted to register this email address which you have already
+registered. If this was not you, you can safely ignore this message.
+
+If you have forgotten your password, please reset your password. If you have not
+verified this email address yet and your verification token is lost or expired,
+please resend the verification email.
+{% endblocktrans %}
