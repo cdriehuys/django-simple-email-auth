@@ -71,14 +71,6 @@ class EmailAddress(models.Model):
             "address."
         ),
     )
-    normalized_address = models.EmailField(
-        help_text=_(
-            "The normalized version of the user's email address used for "
-            "comparison with other addresses."
-        ),
-        unique=True,
-        verbose_name=_("normalized address"),
-    )
     time_created = models.DateTimeField(
         auto_now_add=True,
         help_text=_("The time that the instance was created."),
@@ -107,7 +99,7 @@ class EmailAddress(models.Model):
     )
 
     class Meta:
-        ordering = ("normalized_address",)
+        ordering = ("time_created",)
         verbose_name = _("email address")
         verbose_name_plural = _("email addresses")
 
@@ -123,7 +115,6 @@ class EmailAddress(models.Model):
                 "address",
                 "id",
                 "is_verified",
-                "normalized_address",
                 "time_created",
                 "time_updated",
                 "time_verified",
@@ -137,12 +128,6 @@ class EmailAddress(models.Model):
             The email's address in the user's preferred format.
         """
         return self.address
-
-    def clean(self):
-        """
-        Populate derived fields.
-        """
-        self.normalized_address = self.address.lower()
 
     def send_verification_email(self):
         """

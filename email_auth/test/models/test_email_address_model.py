@@ -14,25 +14,12 @@ def test_init_with_all_fields():
     email = models.EmailAddress(
         address="Test@Example.com",
         is_verified=True,
-        normalized_address="test@example.com",
         time_verified=timezone.now(),
         user=auth.get_user_model()(),
     )
 
     # Default fields should be populated
     assert email.pk
-
-
-def test_clean_normalize_email_address():
-    """
-    Cleaning an email address should populate the "normalized" field
-    with a lower-cased version of the address.
-    """
-    email = models.EmailAddress(address="TeSt@ExAmPlE.cOm")
-
-    email.clean()
-
-    assert email.normalized_address == email.address.lower()
 
 
 def test_repr():
@@ -42,7 +29,6 @@ def test_repr():
     """
     email = models.EmailAddress(
         address="test@example.com",
-        normalized_address="test@example.com",
         time_created=timezone.now(),
         time_updated=timezone.now(),
         time_verified=timezone.now(),
@@ -54,7 +40,6 @@ def test_repr():
             "address",
             "id",
             "is_verified",
-            "normalized_address",
             "time_created",
             "time_updated",
             "time_verified",
