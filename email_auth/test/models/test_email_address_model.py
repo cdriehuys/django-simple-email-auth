@@ -1,5 +1,6 @@
 from unittest import mock
 
+from django.conf import settings
 from django.contrib import auth
 from django.utils import timezone
 
@@ -48,6 +49,25 @@ def test_repr():
     )
 
     assert repr(email) == expected
+
+
+@mock.patch("email_auth.models.email_utils.send_email", autospec=True)
+def test_send_duplicate_notification(mock_send_email):
+    """
+    This method should send a notification to the email address letting
+    the user know another attempt was made to register the email
+    address.
+    """
+    email = models.EmailAddress(address="test@example.com")
+    email.send_duplicate_notification()
+
+    assert mock_send_email.call_args[1] == {
+        "context": {"email": email},
+        "from_email": settings.DEFAULT_FROM_EMAIL,
+        "recipient_list": [email.address],
+        "subject": "Your Email Address has Already Been Registered",
+        "template_name": "email_auth/emails/duplicate-email",
+    }
 
 
 @mock.patch("email_auth.models.EmailVerification.save", autospec=True)
