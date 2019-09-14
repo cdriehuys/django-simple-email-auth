@@ -20,10 +20,12 @@ install:
 script:
   - black --check .
   - flake8
-  - pytest email_auth
+  - coverage run -m pytest email_auth
 
   # Catch errors such as referencing non-existent fields in the admin.
   - example_project/manage.py check
+
+after_success: codecov
 
 # Add job to deploy to PyPI after tests complete
 jobs:
