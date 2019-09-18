@@ -2,6 +2,14 @@
 Changelog
 #########
 
+**************
+In Development
+**************
+
+Features
+* #20: Add `EmailAddress.send_already_verified` method to send a notification to
+  the user that their email address has already been verified.
+
 ******
 v0.2.0
 ******

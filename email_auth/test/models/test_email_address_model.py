@@ -52,6 +52,24 @@ def test_repr():
 
 
 @mock.patch("email_auth.models.email_utils.send_email", autospec=True)
+def test_send_already_verified(mock_send_email):
+    """
+    This method should send a notification to the email address letting
+    the user know their email address is already verified.
+    """
+    email = models.EmailAddress(address="test@example.com")
+    email.send_already_verified()
+
+    assert mock_send_email.call_args[1] == {
+        "context": {"email": email},
+        "from_email": settings.DEFAULT_FROM_EMAIL,
+        "recipient_list": [email.address],
+        "subject": "Your Email Address has Already Been Verified",
+        "template_name": "email_auth/emails/already-verified",
+    }
+
+
+@mock.patch("email_auth.models.email_utils.send_email", autospec=True)
 def test_send_duplicate_notification(mock_send_email):
     """
     This method should send a notification to the email address letting
