@@ -7,6 +7,8 @@ In Development
 **************
 
 Features
+* #6: Add `PasswordReset` model to facilitate password resets using verified
+  email addresses.
 * #20: Add `EmailAddress.send_already_verified` method to send a notification to
   the user that their email address has already been verified.
 

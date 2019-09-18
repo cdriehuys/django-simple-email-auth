@@ -278,3 +278,84 @@ class EmailVerification(models.Model):
         """
         self.email.verify()
         self.delete()
+
+
+class PasswordReset(models.Model):
+    """
+    A model containing a token that can be used to reset a user's
+    password.
+    """
+
+    email = models.ForeignKey(
+        EmailAddress,
+        help_text=_("The email address that the reset token is sent to."),
+        on_delete=models.CASCADE,
+        related_name="password_resets",
+        related_query_name="password_reset",
+        verbose_name=_("email"),
+    )
+    time_created = models.DateTimeField(
+        auto_now_add=True,
+        help_text=_("The time that the instance was created."),
+        verbose_name=_("creation time"),
+    )
+    time_sent = models.DateTimeField(
+        blank=True,
+        help_text=_("The time that the token was emailed out."),
+        null=True,
+        verbose_name=_("sent time"),
+    )
+    time_updated = models.DateTimeField(
+        auto_now=True,
+        help_text=_("The time of the last update to the instance."),
+        verbose_name=_("last update time"),
+    )
+    token = models.CharField(
+        default=generate_token,
+        help_text=_("The random token identifying the password reset."),
+        max_length=TOKEN_LENGTH,
+        primary_key=True,
+        verbose_name=_("token"),
+    )
+
+    class Meta:
+        ordering = ("time_created",)
+        verbose_name = _("password reset")
+        verbose_name_plural = _("password resets")
+
+    def __repr__(self):
+        """
+        Returns:
+            A complete string representation of the instance, suitable
+            for debugging purposes.
+        """
+        return build_repr(
+            self,
+            ["email", "time_created", "time_sent", "time_updated", "token"],
+        )
+
+    def __str__(self):
+        """
+        Returns:
+            A string describing the email address the password reset is
+            associated with.
+        """
+        return f"Password reset for '{self.email}'"
+
+    def send_email(self):
+        """
+        Send the token authorizing the password reset to the email
+        address associated with the instance.
+        """
+        context = {"password_reset": self}
+
+        email_utils.send_email(
+            context=context,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[self.email.address],
+            subject=_("Reset Your Password"),
+            template_name="email_auth/emails/reset-password",
+        )
+
+        self.time_sent = timezone.now()
+        self.save()

@@ -63,3 +63,17 @@ class EmailVerificationAdmin(admin.ModelAdmin):
     list_display = ("email", "time_sent", "time_created", "time_updated")
     readonly_fields = ("time_created", "time_sent", "time_updated", "token")
     search_fields = ("email__address", "token")
+
+
+@admin.register(models.PasswordReset)
+class PasswordResetAdmin(admin.ModelAdmin):
+    """
+    Admin for the ``PasswordReset`` model.
+    """
+
+    autocomplete_fields = ("email",)
+    date_hierarchy = "time_created"
+    fields = ("email", "token", "time_sent", "time_created", "time_updated")
+    list_display = ("email", "time_sent", "time_created", "time_updated")
+    readonly_fields = ("time_created", "time_sent", "time_updated", "token")
+    search_fields = ("email__address", "token")
