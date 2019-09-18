@@ -129,6 +129,22 @@ class EmailAddress(models.Model):
         """
         return self.address
 
+    def send_already_verified(self):
+        """
+        Send an email notifying the user that this email address has
+        already been verified.
+        """
+        context = {"email": self}
+        template = "email_auth/emails/already-verified"
+
+        email_utils.send_email(
+            context=context,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[self.address],
+            subject=_("Your Email Address has Already Been Verified"),
+            template_name=template,
+        )
+
     def send_duplicate_notification(self):
         """
         Send an email notifying the user that this email address has
