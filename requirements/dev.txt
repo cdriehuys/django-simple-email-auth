@@ -1,3 +1,6 @@
+-r docs/requirements.txt
 -r test.txt
 
 pre-commit
+# sphinx-rtd-theme only required when building locally
+sphinx-rtd-theme

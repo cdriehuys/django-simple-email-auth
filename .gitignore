@@ -20,3 +20,6 @@ db.sqlite3
 
 # IDE Settings
 .idea/
+
+# Sphinx
+/docs/_build/
