@@ -228,7 +228,7 @@ class EmailVerification(models.Model):
     )
 
     class Meta:
-        ordering = ("email__normalized_address",)
+        ordering = ("time_created",)
         verbose_name = _("email verification")
         verbose_name_plural = _("email verifications")
 

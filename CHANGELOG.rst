@@ -6,6 +6,12 @@ Changelog
 In Development
 **************
 
+Breaking Changes
+================
+
+* #23: The default ordering of `EmailVerification` instances has been switched
+  from ``email__normalized_address`` (doesn't exist) to ``time_created``.
+
 Features
 ========
 

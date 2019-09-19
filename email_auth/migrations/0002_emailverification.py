@@ -64,7 +64,7 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name": "email verification",
                 "verbose_name_plural": "email verifications",
-                "ordering": ("email__normalized_address",),
+                "ordering": ("time_created",),
             },
         )
     ]
