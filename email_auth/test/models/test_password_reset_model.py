@@ -43,7 +43,7 @@ def test_repr():
 @mock.patch("email_auth.models.PasswordReset.save", autospec=True)
 @mock.patch("email_auth.models.email_utils.send_email", autospec=True)
 @mock.patch("email_auth.models.timezone.now", autospec=True)
-def test_send_duplicate_notification(mock_now, mock_send_email, mock_save):
+def test_send_email(mock_now, mock_send_email, mock_save):
     """
     This method should send the password reset token to the associated
     email address and record the send time of the email.

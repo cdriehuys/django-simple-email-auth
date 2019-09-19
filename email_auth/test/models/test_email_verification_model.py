@@ -38,11 +38,13 @@ def test_repr():
     assert repr(verification) == expected
 
 
+@mock.patch("email_auth.models.EmailVerification.save", autospec=True)
 @mock.patch("email_auth.models.email_utils.send_email", autospec=True)
-def test_send_email(mock_send_email):
+@mock.patch("email_auth.models.timezone.now", autospec=True)
+def test_send_email(mock_now, mock_send_email, _):
     """
-    Sending an email should use django-email-utils to send the
-    verification token to the user.
+    This method should send the email verification token to the
+    associated email address and record the send time of the email.
     """
     user = get_user_model()()
     email = models.EmailAddress(address="test@example.com", user=user)
@@ -61,6 +63,9 @@ def test_send_email(mock_send_email):
         "subject": "Please Verify Your Email Address",
         "template_name": "email_auth/emails/verify-email",
     }
+
+    assert verification.time_sent == mock_now.return_value
+    assert verification.save.call_count == 1
 
 
 def test_str():

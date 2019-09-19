@@ -271,6 +271,9 @@ class EmailVerification(models.Model):
             template_name=template,
         )
 
+        self.time_sent = timezone.now()
+        self.save()
+
     def verify(self):
         """
         Mark the associated email address as verified and delete the
