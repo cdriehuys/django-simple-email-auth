@@ -7,10 +7,18 @@ In Development
 **************
 
 Features
-* #6: Add `PasswordReset` model to facilitate password resets using verified
+========
+
+* #6: Add ``PasswordReset`` model to facilitate password resets using verified
   email addresses.
-* #20: Add `EmailAddress.send_already_verified` method to send a notification to
-  the user that their email address has already been verified.
+* #20: Add ``EmailAddress.send_already_verified`` method to send a notification
+  to the user that their email address has already been verified.
+
+Bug Fixes
+=========
+
+* #22: The ``time_sent`` field is now populated when calling
+  ``EmailVerification.send_email``.
 
 ******
 v0.2.0
