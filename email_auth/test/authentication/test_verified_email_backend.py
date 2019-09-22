@@ -46,8 +46,10 @@ def test_authenticate_with_verified_email_correct_password(
     assert mock_email_address_qs.get.call_args[1]["address"] == email.address
 
 
-@mock.patch("email_auth.authentication.get_user_model")
-def test_authenticate_with_missing_email(mock_get_user, mock_email_address_qs):
+@mock.patch("django.contrib.auth.models.User.check_password", autospec=True)
+def test_authenticate_with_missing_email(
+    mock_check_password, mock_email_address_qs
+):
     """
     If no verified email with the given address exists, authentication
     should fail.
@@ -63,7 +65,7 @@ def test_authenticate_with_missing_email(mock_get_user, mock_email_address_qs):
     assert mock_email_address_qs.get.call_args[1]["is_verified"]
 
     # There should still be a password check even if no user is found.
-    assert mock_get_user.return_value.check_password.call_count == 1
+    assert mock_check_password.call_count == 1
 
 
 def test_authenticate_with_verified_email_incorrect_password(

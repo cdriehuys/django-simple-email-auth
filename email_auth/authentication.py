@@ -38,7 +38,7 @@ class VerifiedEmailBackend:
         except models.EmailAddress.DoesNotExist:
             # Do a password comparison anyway to mitigate timing
             # attacks.
-            dummy_user = get_user_model()
+            dummy_user = get_user_model()()
             dummy_user.set_password("jekyll")
             dummy_user.check_password("hyde")
 
