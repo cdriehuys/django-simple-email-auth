@@ -3,6 +3,16 @@ Changelog
 #########
 
 ******
+v0.3.1
+******
+
+Bug Fixes
+=========
+
+* :issue:`30`: Fix error when attempting to authenticate an invalid
+  email/password combination.
+
+******
 v0.3.0
 ******
 
