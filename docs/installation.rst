@@ -36,7 +36,13 @@ Add ``email_auth`` to your ``INSTALLED_APPS``:
         # Django apps
 
         # Third party apps
+
+        # Core models and templates:
         "email_auth",
+
+        # If you would like to use the provided REST API:
+        "email_auth.interfaces.rest",
+
         # More third party apps
 
         # Your custom apps
@@ -46,6 +52,8 @@ Next ensure Django is `set up to send emails <django-emails>`_. Additionally,
 ensure ``DEFAULT_FROM_EMAIL`` is set. This is the address that all account
 related emails such as email verifications and password reset emails are sent
 from.
+
+See :ref:`app-settings` for configuration options.
 
 .. _django-emails: https://docs.djangoproject.com/en/dev/topics/email/
 .. _django-simple-email-auth-pypi: https://pypi.org/project/django-simple-email-auth/

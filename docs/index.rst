@@ -8,6 +8,7 @@
    :caption: Contents:
 
    installation
+   settings
    templates
    changelog-proxy
 

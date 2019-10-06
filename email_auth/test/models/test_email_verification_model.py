@@ -1,6 +1,6 @@
 from unittest import mock
 
-from django.conf import settings
+from django.conf import settings as django_settings
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 
@@ -57,8 +57,47 @@ def test_send_email(mock_now, mock_send_email, _):
             "email": email,
             "user": user,
             "verification": verification,
+            "verification_url": None,
         },
-        "from_email": settings.DEFAULT_FROM_EMAIL,
+        "from_email": django_settings.DEFAULT_FROM_EMAIL,
+        "recipient_list": [email.address],
+        "subject": "Please Verify Your Email Address",
+        "template_name": "email_auth/emails/verify-email",
+    }
+
+    assert verification.time_sent == mock_now.return_value
+    assert verification.save.call_count == 1
+
+
+@mock.patch("email_auth.models.EmailVerification.save", autospec=True)
+@mock.patch("email_auth.models.email_utils.send_email", autospec=True)
+@mock.patch("email_auth.models.timezone.now", autospec=True)
+def test_send_email_with_verification_url(
+    mock_now, mock_send_email, _, settings
+):
+    """
+    This method should send the email verification token to the
+    associated email address and record the send time of the email.
+    """
+    verification_url = "example.com/verify/{key}"
+    settings.EMAIL_AUTH = {"EMAIL_VERIFICATION_URL": verification_url}
+
+    user = get_user_model()()
+    email = models.EmailAddress(address="test@example.com", user=user)
+    verification = models.EmailVerification(email=email)
+
+    verification.send_email()
+
+    assert mock_send_email.call_args[1] == {
+        "context": {
+            "email": email,
+            "user": user,
+            "verification": verification,
+            "verification_url": verification_url.format(
+                key=verification.token
+            ),
+        },
+        "from_email": django_settings.DEFAULT_FROM_EMAIL,
         "recipient_list": [email.address],
         "subject": "Please Verify Your Email Address",
         "template_name": "email_auth/emails/verify-email",
