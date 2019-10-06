@@ -1,6 +1,6 @@
 from unittest import mock
 
-from django.conf import settings
+from django.conf import settings as django_settings
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 
@@ -43,7 +43,7 @@ def test_repr():
 @mock.patch("email_auth.models.PasswordReset.save", autospec=True)
 @mock.patch("email_auth.models.email_utils.send_email", autospec=True)
 @mock.patch("email_auth.models.timezone.now", autospec=True)
-def test_send_email(mock_now, mock_send_email, mock_save):
+def test_send_email(mock_now, mock_send_email, _):
     """
     This method should send the password reset token to the associated
     email address and record the send time of the email.
@@ -54,8 +54,39 @@ def test_send_email(mock_now, mock_send_email, mock_save):
     password_reset.send_email()
 
     assert mock_send_email.call_args[1] == {
-        "context": {"password_reset": password_reset},
-        "from_email": settings.DEFAULT_FROM_EMAIL,
+        "context": {"password_reset": password_reset, "reset_url": None},
+        "from_email": django_settings.DEFAULT_FROM_EMAIL,
+        "recipient_list": [email.address],
+        "subject": "Reset Your Password",
+        "template_name": "email_auth/emails/reset-password",
+    }
+
+    assert password_reset.time_sent == mock_now.return_value
+    assert password_reset.save.call_count == 1
+
+
+@mock.patch("email_auth.models.PasswordReset.save", autospec=True)
+@mock.patch("email_auth.models.email_utils.send_email", autospec=True)
+@mock.patch("email_auth.models.timezone.now", autospec=True)
+def test_send_email_with_reset_url(mock_now, mock_send_email, _, settings):
+    """
+    This method should send the password reset token to the associated
+    email address and record the send time of the email.
+    """
+    reset_url_template = "example.com/reset-password/{key}"
+    settings.EMAIL_AUTH = {"PASSWORD_RESET_URL": reset_url_template}
+
+    email = models.EmailAddress(address="test@example.com")
+    password_reset = models.PasswordReset(email=email)
+
+    password_reset.send_email()
+
+    assert mock_send_email.call_args[1] == {
+        "context": {
+            "password_reset": password_reset,
+            "reset_url": reset_url_template.format(key=password_reset.token),
+        },
+        "from_email": django_settings.DEFAULT_FROM_EMAIL,
         "recipient_list": [email.address],
         "subject": "Reset Your Password",
         "template_name": "email_auth/emails/reset-password",

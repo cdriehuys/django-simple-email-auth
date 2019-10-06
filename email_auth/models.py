@@ -8,6 +8,8 @@ from django.db import models
 from django.utils import crypto, timezone
 from django.utils.translation import ugettext_lazy as _
 
+from email_auth import app_settings
+
 
 logger = logging.getLogger(__name__)
 
@@ -256,10 +258,17 @@ class EmailVerification(models.Model):
         Send an email containing the verification token to the email
         address being verified.
         """
+        verification_url_template = app_settings.EMAIL_VERIFICATION_URL
+        if verification_url_template is not None:
+            verification_url = verification_url_template.format(key=self.token)
+        else:
+            verification_url = None
+
         context = {
             "email": self.email,
             "user": self.email.user,
             "verification": self,
+            "verification_url": verification_url,
         }
         template = "email_auth/emails/verify-email"
 
@@ -350,7 +359,13 @@ class PasswordReset(models.Model):
         Send the token authorizing the password reset to the email
         address associated with the instance.
         """
-        context = {"password_reset": self}
+        reset_url_template = app_settings.PASSWORD_RESET_URL
+        if reset_url_template is not None:
+            reset_url = reset_url_template.format(key=self.token)
+        else:
+            reset_url = None
+
+        context = {"password_reset": self, "reset_url": reset_url}
 
         email_utils.send_email(
             context=context,

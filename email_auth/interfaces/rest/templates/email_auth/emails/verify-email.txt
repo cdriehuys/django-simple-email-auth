@@ -1,0 +1,6 @@
+{% load i18n %}{% blocktrans %}Hello {{ user }},
+
+Please visit the following URL to verify your email address:
+
+{{ verification_url }}
+{% endblocktrans %}

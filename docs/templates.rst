@@ -71,6 +71,10 @@ Provided Context
   ``verification``
     The ``EmailVerification`` instance containing the token used to verify
     ownership of the email address.
+  ``verification_url``
+    If the :ref:`email-verification-url` setting has been set, this variable
+    contains the provided URL formatted with the verification token. If the
+    setting was not provided, this is ``None``.
 
 **************
 Password Reset
@@ -86,6 +90,10 @@ Provided Context
   ``password_reset``
     The ``PasswordReset`` instance containing the token used to reset the user's
     password.
+  ``reset_url``
+    If the :ref:`password-reset-url` setting has been set, this variable
+    contains the provided template formatted with the reset token. If the
+    setting was not provided, this is ``None``.
 
 
 .. _django-email-utils: https://github.com/cdriehuys/django-email-utils

@@ -2,6 +2,17 @@
 Changelog
 #########
 
+**************
+In Development
+**************
+
+Features
+========
+
+* :issue:`32`: Link to frontend pages for resetting passwords and verifying
+  email addresses. These links are specified with the ``PASSWORD_RESET_URL`` and
+  ``EMAIL_VERIFICATION_URL`` settings, respectively.
+
 ******
 v0.3.1
 ******
