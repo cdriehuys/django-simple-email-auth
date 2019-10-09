@@ -49,17 +49,22 @@ Add ``email_auth`` to your ``INSTALLED_APPS``:
 
         # Third party apps
 
-        # Core models and templates:
-        "email_auth",
-
         # If you would like to use the provided REST API:
         "email_auth.interfaces.rest",
         "rest_framework",
+
+        # Core models and templates:
+        "email_auth",
 
         # More third party apps
 
         # Your custom apps
     ]
+
+Note the order that you include the apps in is important. In particular,
+``email_auth.interfaces.rest`` overrides some templates provided by the core
+``email_auth``. In order for this to work, the overriding app has to be listed
+first so that Django finds its templates first.
 
 Next ensure Django is `set up to send emails <django-emails_>`_. Additionally,
 ensure ``DEFAULT_FROM_EMAIL`` is set. This is the address that all account
