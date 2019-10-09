@@ -14,6 +14,8 @@ Features
   ``EMAIL_VERIFICATION_URL`` settings, respectively.
 * :issue:`36`: Add endpoint to verify an email address to the provided REST
   interface.
+* :issue:`38`: Add endpoint to resend a verification email to the provided REST
+  interface.
 
 ******
 v0.3.1

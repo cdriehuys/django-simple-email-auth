@@ -7,8 +7,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INSTALLED_APPS = [
     "django.contrib.auth",
     "django.contrib.contenttypes",
-    "email_auth",
     "email_auth.interfaces.rest",
+    "email_auth",
 ]
 
 SECRET_KEY = "secret"

@@ -1,0 +1,6 @@
+{% load i18n %}{% blocktrans %}Hello,
+
+Before you can verify ownership of "{{ email }}", you need to add the address
+to your account. If you do not have an account, you can register using this
+email address.
+{% endblocktrans %}
