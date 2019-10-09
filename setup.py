@@ -37,4 +37,6 @@ setup(
     packages=find_packages(),
     # Dependencies
     install_requires=["Django >= 2.1", "django-email-utils >= 1.0"],
+    # Interface-specific dependencies
+    extras_require={"rest": ["djangorestframework"]},
 )
