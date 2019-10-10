@@ -22,12 +22,12 @@ install:
 script:
   - black --check .
   - flake8
-  - coverage run -m pytest email_auth
+  - COVERAGE_FILE=.coverage.test coverage run -m pytest email_auth
+  - COVERAGE_FILE=.coverage.check coverage run ./manage.py check
 
-  # Catch errors such as referencing non-existent fields in the admin.
-  - example_project/manage.py check
-
-after_success: codecov
+after_success:
+  - coverage combine
+  - codecov
 
 # Add job to deploy to PyPI after tests complete
 jobs:
