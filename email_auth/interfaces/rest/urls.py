@@ -16,4 +16,14 @@ urlpatterns = [
         views.EmailVerificationView.as_view(),
         name="email-verification-create",
     ),
+    path(
+        "password-reset-requests/",
+        views.PasswordResetRequestView.as_view(),
+        name="password-reset-request-list",
+    ),
+    path(
+        "password-resets/",
+        views.PasswordResetView.as_view(),
+        name="password-reset-list",
+    ),
 ]
