@@ -10,6 +10,7 @@
    installation
    settings
    templates
+   rest-endpoints
    changelog-proxy
 
 

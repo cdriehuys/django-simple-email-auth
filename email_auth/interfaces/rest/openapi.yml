@@ -1,0 +1,272 @@
+openapi: 3.0.1
+
+info:
+  title: Django Simple Email Auth
+  description: A REST API for managing email addresses.
+  contact:
+    url: https://github.com/cdriehuys/django-simple-email-auth
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 0.3.1
+
+externalDocs:
+  description: Documentation for django-simple-email-auth
+  url: https://django-simple-email-auth.readthedocs.io
+
+servers:
+  - description: |
+      All endpoints are relative to the path that you include the application's
+      URLs at. For example, with the following include in `urls.py`:
+
+      ```python
+      path("accounts/", include("email_auth.interfaces.rest.urls"))
+      ```
+
+      the endpoints would be prefixed with `/accounts/`.
+    url: 'http://your-server.com/<prefix>/'
+
+tags:
+  - name: Email Addresses
+    description: Managing email addresses and verifications
+  - name: Passwords
+    description: Manage password resets using verified email addresses
+
+paths:
+  /email-verification-requests/:
+    post:
+      tags:
+        - Email Addresses
+      summary: Request a new email verification token
+      operationId: emailVerificationRequestCreate
+      requestBody:
+        description: The email address to create a new verification token for.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailVerificationRequest'
+
+      responses:
+        201:
+          description: |
+            Successfully processed request.
+
+            If the provided email address has been registered but not yet
+            verified, a new verification token will be emailed to the address.
+
+            If the provided email address has not yet been registered or already
+            been verified, an email containing that information will be sent
+            instead.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailVerificationRequest'
+        400:
+          description: The provided email address is invalid.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ErrorResponse'
+                  - type: object
+                    properties:
+                      email:
+                        type: array
+                        description: |
+                          A list of reasons specifying why the provided email is
+                          not valid.
+                        items:
+                          type: string
+                          description: A reason the provided value is not valid.
+
+  /email-verifications/:
+    post:
+      tags:
+        - Email Addresses
+      summary: Verify an email address
+      operationId: emailVerificationCreate
+      requestBody:
+        description: The token authorizing the verification.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailVerification'
+
+      responses:
+        201:
+          description: Verified email successfully
+          content:
+            application/json:
+              schema:
+                type: object
+        400:
+          description: The provided token is invalid.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ErrorResponse'
+                  - type: object
+                    properties:
+                      token:
+                        type: array
+                        description: |
+                          A list of reasons specifying why the provided token is
+                          not valid.
+                        items:
+                          type: string
+                          description: A reason the provided value is not valid.
+
+  /password-reset-requests/:
+    post:
+      tags:
+        - Passwords
+      summary: Request a new password reset token
+      operationId: passwordResetRequestCreate
+      requestBody:
+        description: |
+          The information identifying the user requesting a password reset.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+
+      responses:
+        201:
+          description: |
+            Successfully processed request.
+
+            If the provided email address is owned by a user and has been
+            verified, a new password reset token will be generated and emailed
+            to the provided address.
+
+            If the provided email address does not exist or has not been
+            verified, no action is taken.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordResetRequest'
+        400:
+          description: The provided email address is invalid.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ErrorResponse'
+                  - type: object
+                    properties:
+                      email:
+                        type: array
+                        description: |
+                          A list of reasons specifying why the provided email is
+                          not valid.
+                        items:
+                          type: string
+                          description: A reason the provided value is not valid.
+
+  /password-resets/:
+    post:
+      tags:
+        - Passwords
+      summary: Reset a user's password
+      operationId: passwordResetCreate
+      requestBody:
+        description: A password reset request.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordReset'
+
+      responses:
+        201:
+          description: Password successfully reset
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordReset'
+        400:
+          description: The request is invalid.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ErrorResponse'
+                  - type: object
+                    properties:
+                      token:
+                        type: array
+                        description: |
+                          A list of reasons specifying why the provided token is
+                          not valid.
+                        items:
+                          type: string
+                          description: A reason the provided value is not valid.
+                  - type: object
+                    properties:
+                      password:
+                        type: array
+                        description: |
+                          A list of reasons specifying why the provided password
+                          is not valid.
+                        items:
+                          type: string
+                          description: A reason the provided value is not valid.
+
+components:
+  schemas:
+    EmailVerification:
+      type: object
+      required:
+        - token
+      properties:
+        token:
+          type: string
+          description: |
+            The verification token that was sent to the email address being
+            verified.
+    EmailVerificationRequest:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+          description: |
+            The email address to generate a new verification token for.
+    ErrorResponse:
+      type: object
+      properties:
+        non_field_errors:
+          type: array
+          description: |
+            Problems with the request that are not related to one specific field.
+          items:
+            type: string
+            description: A reason the provided values are invalid.
+    PasswordReset:
+      type: object
+      required:
+        - password
+        - token
+      properties:
+        password:
+          type: string
+          writeOnly: true
+          description: The user's new password.
+        token:
+          type: string
+          writeOnly: true
+          description: |
+            The password reset token that the user was sent via email.
+    PasswordResetRequest:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+          description: |
+            A verified email address owned by the user requesting the password
+            reset.
