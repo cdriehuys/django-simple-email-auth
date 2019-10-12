@@ -31,7 +31,7 @@ release = "v0.3.1"
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ["sphinx_issues"]
+extensions = ["sphinx_issues", "sphinxcontrib.redoc"]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -62,3 +62,19 @@ master_doc = "index"
 # -- Options for sphinx-issues -----------------------------------------------
 
 issues_github_path = "cdriehuys/django-simple-email-auth"
+
+redoc = [
+    {
+        "name": "Django Simple Email Auth",
+        "page": "rest-endpoints-browser",
+        "spec": "../email_auth/interfaces/rest/openapi.yml",
+        "embed": True,
+    }
+]
+
+# -- Options for sphinxcontrib-redoc -----------------------------------------
+
+# Use redoc@next for Open API v3 support
+redoc_uri = (
+    "https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"
+)
