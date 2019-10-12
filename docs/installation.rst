@@ -66,7 +66,12 @@ Note the order that you include the apps in is important. In particular,
 ``email_auth``. In order for this to work, the overriding app has to be listed
 first so that Django finds its templates first.
 
-Next ensure Django is `set up to send emails <django-emails_>`_. Additionally,
+Django must also be configured to use the authentication backend provided by the
+app. This is what allows users to log in using any verified email address::
+
+    AUTHENTICATION_BACKENDS = ["email_auth.authentication.VerifiedEmailBackend"]
+
+Next, ensure Django is `set up to send emails <django-emails_>`_. Additionally,
 ensure ``DEFAULT_FROM_EMAIL`` is set. This is the address that all account
 related emails such as email verifications and password reset emails are sent
 from.
