@@ -41,6 +41,7 @@ Features
 A brief overview of the features offered by this package:
 
 * Verification of email ownership
+* Authentication using any verified email address
 * Password resets
 
 ************

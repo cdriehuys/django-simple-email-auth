@@ -1,11 +1,17 @@
+import logging
 from typing import Optional
 
 import email_utils
 from django.conf import settings
+from django.contrib.auth import password_validation
+from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
 from email_auth import models
+
+
+logger = logging.getLogger(__name__)
 
 
 class EmailVerificationRequestSerializer(serializers.Serializer):
@@ -137,3 +143,62 @@ class PasswordResetRequestSerializer(serializers.Serializer):
         reset.send_email()
 
         return reset
+
+
+class PasswordResetSerializer(serializers.Serializer):
+    """
+    Serializer to reset a user's password.
+    """
+
+    password = serializers.CharField(
+        style={"input_type": "password"}, write_only=True
+    )
+    token = serializers.CharField(
+        max_length=models.TOKEN_LENGTH, write_only=True
+    )
+
+    _reset: models.PasswordReset = None
+
+    def save(self, **kwargs):
+        """
+        Reset the password of the user associated with the provided
+        password reset token.
+        """
+        reset = self._reset
+        user = reset.email.user
+        user.set_password(self.validated_data["password"])
+        user.save()
+
+        logger.info("Reset the password for user %r", user)
+
+        reset.delete()
+
+    def validate(self, attrs: dict) -> dict:
+        """
+        Ensure that the provided token is valid and the provided
+        password passes Django's built in password validation.
+
+        Args:
+            attrs:
+                The data to validate.
+
+        Returns:
+            The validated data.
+        """
+        try:
+            self._reset = models.PasswordReset.objects.get(
+                token=attrs["token"]
+            )
+        except models.PasswordReset.DoesNotExist:
+            raise serializers.ValidationError(
+                {"token": _("The provided password reset token is invalid.")}
+            )
+
+        try:
+            password_validation.validate_password(
+                attrs["password"], user=self._reset.email.user
+            )
+        except ValidationError as e:
+            raise serializers.ValidationError({"password": e.messages})
+
+        return attrs

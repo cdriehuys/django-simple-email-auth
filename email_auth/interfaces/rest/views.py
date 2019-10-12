@@ -52,3 +52,19 @@ class PasswordResetRequestView(generics.CreateAPIView):
     """
 
     serializer_class = serializers.PasswordResetRequestSerializer
+
+
+class PasswordResetView(generics.CreateAPIView):
+    """
+    post:
+    Reset a user's password using a password reset token.
+
+    If the provided token is valid and the new password passes the
+    password validation checks, a `201` response is returned and the
+    user's password is changed.
+
+    If the provided token is invalid or the new password does not pass
+    validation, a `400` response is returned.
+    """
+
+    serializer_class = serializers.PasswordResetSerializer
