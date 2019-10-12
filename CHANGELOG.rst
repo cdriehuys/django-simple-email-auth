@@ -16,6 +16,7 @@ Features
   interface.
 * :issue:`38`: Add endpoint to resend a verification email to the provided REST
   interface.
+* :issue:`39`: Add endpoint to request a password reset.
 
 ******
 v0.3.1

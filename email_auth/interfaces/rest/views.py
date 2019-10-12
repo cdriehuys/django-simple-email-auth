@@ -34,3 +34,21 @@ class EmailVerificationView(generics.CreateAPIView):
     """
 
     serializer_class = serializers.EmailVerificationSerializer
+
+
+class PasswordResetRequestView(generics.CreateAPIView):
+    """
+    post:
+    Request a password reset token be sent to the provided email
+    address.
+
+    If the provided email address exists and is verified, a new password
+    reset token will be generated and sent to the provided address. In
+    any other case, no email will be sent. Regardless of the outcome, a
+    `201` response is returned.
+
+    If the provided email address is not a valid email address, a `400`
+    response is returned.
+    """
+
+    serializer_class = serializers.PasswordResetRequestSerializer

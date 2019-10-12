@@ -106,3 +106,34 @@ class EmailVerificationSerializer(serializers.Serializer):
             )
 
         return token
+
+
+class PasswordResetRequestSerializer(serializers.Serializer):
+    """
+    Serializer to create and send a password reset token to a verified
+    email address.
+    """
+
+    email = serializers.EmailField()
+
+    def save(self, **kwargs) -> Optional[models.PasswordReset]:
+        """
+        Send a new password reset token to the provided email address if
+        the email has already been verified. If the provided email has
+        not been verified, no action is taken.
+
+        Returns:
+            The created :py:class:`PasswordReset` instance if one was
+            created or else ``None``.
+        """
+        try:
+            email = models.EmailAddress.objects.get(
+                address__iexact=self.validated_data["email"], is_verified=True
+            )
+        except models.EmailAddress.DoesNotExist:
+            return None
+
+        reset = models.PasswordReset(email=email)
+        reset.send_email()
+
+        return reset
