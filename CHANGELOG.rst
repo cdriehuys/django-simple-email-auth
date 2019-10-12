@@ -18,6 +18,11 @@ Features
   interface.
 * :issue:`39`: Add endpoints to request a password reset and reset a password.
 
+Documentation
+=============
+
+* :issue:`43`: Document usage of provided authentication backend.
+
 ******
 v0.3.1
 ******
