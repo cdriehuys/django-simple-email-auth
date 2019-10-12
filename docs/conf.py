@@ -23,7 +23,7 @@ copyright = "2019, Chathan Driehuys"
 author = "Chathan Driehuys"
 
 # The full version, including alpha/beta/rc tags
-release = "v0.3.1"
+release = "v0.4.0"
 
 
 # -- General configuration ---------------------------------------------------
