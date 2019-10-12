@@ -9,12 +9,12 @@ urlpatterns = [
     path(
         "email-verification-requests/",
         views.EmailVerificationRequestView.as_view(),
-        name="email-verification-request-create",
+        name="email-verification-request-list",
     ),
     path(
         "email-verifications/",
         views.EmailVerificationView.as_view(),
-        name="email-verification-create",
+        name="email-verification-list",
     ),
     path(
         "password-reset-requests/",

@@ -6,6 +6,13 @@ Changelog
 In Development
 **************
 
+Breaking Changes
+================
+
+* :issue:`44`: Rename ``email-verification-request-create`` and
+  ``email-verification-create`` URLs to ``email-verification-request-list`` and
+  ``email-verification-list``, respectively.
+
 Features
 ========
 
